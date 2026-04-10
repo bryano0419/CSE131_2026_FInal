@@ -12,7 +12,7 @@ public class PerformanceTests
     {
         foreach (int size in _testSizes)
         {
-            Console.WriteLine($"--- Testing LinkedPlaylist Size: {size} ---");
+            Console.WriteLine($"--- Testing DictPlaylist Size: {size} ---");
             TestAddSongPerformance(size);
             TestRemoveSongPerformance(size);
             TestMoveSongPerformance(size);
@@ -22,8 +22,8 @@ public class PerformanceTests
 
     private void TestAddSongPerformance(int operations)
     {
-        // TARGET THE NEW LINKED LIST CLASS
-        var playlist = new LinkedPlaylist(); 
+        // TARGETING WEEK 13 DICTIONARY IMPLEMENTATION
+        var playlist = new DictPlaylist(); 
         var stopwatch = new Stopwatch();
         
         stopwatch.Start();
@@ -38,8 +38,8 @@ public class PerformanceTests
 
     private void TestRemoveSongPerformance(int size)
     {
-        // TARGET THE NEW LINKED LIST CLASS
-        var playlist = new LinkedPlaylist();
+        // TARGETING WEEK 13 DICTIONARY IMPLEMENTATION
+        var playlist = new DictPlaylist();
         for (int i = 0; i < size; i++)
         {
             playlist.AddSong(new Song() { Title = $"Song{i}" });
@@ -48,6 +48,7 @@ public class PerformanceTests
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         
+        // Dictionary lookup is O(1), but List removal is O(n)
         playlist.RemoveSong(new Song { Title = $"Song{size - 1}" });
         
         stopwatch.Stop();
@@ -56,8 +57,8 @@ public class PerformanceTests
 
     private void TestMoveSongPerformance(int size)
     {
-        // TARGET THE NEW LINKED LIST CLASS
-        var playlist = new LinkedPlaylist();
+        // TARGETING WEEK 13 DICTIONARY IMPLEMENTATION
+        var playlist = new DictPlaylist();
         for (int i = 0; i < size; i++)
         {
             playlist.AddSong(new Song() { Title = $"Song{i}" });
@@ -66,6 +67,7 @@ public class PerformanceTests
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         
+        // Finding the index in the order list is O(n)
         playlist.MoveSongUp(new Song { Title = $"Song{size - 1}" });
         
         stopwatch.Stop();
@@ -73,24 +75,41 @@ public class PerformanceTests
     }
 }
 
+/* * PERFORMANCE ANALYSIS - WEEK 11 (List Implementation)
+ * ---------------------------------------------------
+ * 1. AddSong: O(1) - Adding to the end of a List is constant time. 
+ * 2. RemoveSong: O(n) - Requires linear search and element shifting.
+ * 3. PlayNext: O(1) - Simple index access.
+ * 4. MoveSongUp: O(n) - Requires linear search before swapping.
+ */
+
 /* * PERFORMANCE ANALYSIS - WEEK 12 (Linked List Implementation)
  * -----------------------------------------------------------
+ * 1. AddSong: O(1) - Constant time tail insertion.
+ * 2. RemoveSong: O(n) - O(n) search to find the node, though removal is O(1).
+ * 3. PlayNext: O(1) - Direct pointer reference to node.Next.
+ * 4. MoveSongUp/Down: O(n) - Must traverse the chain to find the node.
+ */
+
+/* * PERFORMANCE ANALYSIS - WEEK 13 (Dictionary Implementation)
+ * -----------------------------------------------------------
  * 1. AddSong: O(1) 
- * LinkedList.AddLast is constant time because the list maintains 
- * a pointer to the Tail node.
- * * 2. RemoveSong: O(n) 
- * Even though the actual node removal is O(1), we must perform a 
- * linear search (O(n)) to find the specific title in the chain.
- * * 3. PlayNext: O(1) 
- * Moving from one node to 'node.Next' is a simple pointer 
- * reference and does not depend on the size of the playlist.
- * * 4. MoveSongUp/Down: O(n) 
- * Similar to RemoveSong, we must traverse the list to find the 
- * node before we can re-link the pointers.
+ * Dictionary insertion and List appending are both O(1) on average.
  *
- * WEEK 12 vs WEEK 11 Comparison:
- * In Week 11 (List), removing or moving items required shifting 
- * elements in memory (O(n)). In Week 12 (LinkedList), we don't 
- * shift memory, but we still have O(n) time because we must 
- * search for the node first.
+ * 2. RemoveSong: O(n) 
+ * While Dictionary lookup is O(1), maintaining a sequence requires a List. 
+ * Finding and removing the title from the List remains O(n).
+ *
+ * 3. PlayNext: O(1) 
+ * Dictionary lookup by key and List index access are both constant time.
+ *
+ * 4. MoveSongUp/Down: O(n) 
+ * We must perform a linear search (O(n)) in the "order" list to find 
+ * the current position before we can swap titles.
+ *
+ * WEEK 13 vs PREVIOUS WEEKS:
+ * The Dictionary provides the fastest possible lookup by Title. However, 
+ * because a playlist is an ordered collection, we are still tied to O(n) 
+ * for operations that modify the sequence (Remove/Move) because the 
+ * "order" list must be searched.
  */
