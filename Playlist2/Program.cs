@@ -8,4 +8,24 @@
 // pass the playlist to the common Menu class
 
 // call Display on that newly created menu
-Console.WriteLine("Replace this line with real code");
+using System;
+using PlaylistProject;
+
+namespace PlaylistProject
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 1. create the playlist
+            // Make sure this matches the 'public class' name in your other file exactly!
+            IPlaylist myPlaylist = new LinkedPlaylist();
+
+            // 2. pass the playlist to the common Menu class
+            Menu mainMenu = new Menu(myPlaylist);
+
+            // 3. call Display on that newly created menu
+            mainMenu.Display();
+        }
+    }
+}
