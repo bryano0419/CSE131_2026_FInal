@@ -112,3 +112,18 @@ namespace PlaylistProject
         }
     }
 }
+
+/* * PERFORMANCE ANALYSIS - WEEK 11 (List Implementation)
+ * ---------------------------------------------------
+ * 1. AddSong: O(1) - Adding to the end of a List is constant time. 
+ * My results stayed consistent even as the size grew to 100,000.
+ *
+ * 2. RemoveSong: O(n) - We have to search the list for the title (Linear Search). 
+ * My results showed a significant increase in time as the size grew.
+ *
+ * 3. PlayNext: O(1) - Accessing a list by index is constant time. 
+ * The size of the playlist does not affect speed here.
+ *
+ * 4. MoveSongUp: O(n) - Requires a linear search to find the song's index 
+ * before the swap can happen. Time increases linearly with playlist size.
+ */

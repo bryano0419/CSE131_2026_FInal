@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System;
+using PlaylistProject; // Make sure this matches your other files
 
 [TestFixture]
 public class FunctionalTests
@@ -21,12 +22,12 @@ public class FunctionalTests
         var song = new Song() { Artist = "Rick Astley", Length = 1.2, Title = "Never Gonna Give You Up" };
         playlist.AddSong(song);
 
-        // Test failing to remove (wrong title)
-        Assert.That(playlist.RemoveSong("Always Gonna Give You Up"), Is.False);
+        // FIX: Pass a Song object, not a string
+        Assert.That(playlist.RemoveSong(new Song { Title = "Always Gonna Give You Up" }), Is.False);
         Assert.That(playlist.Length(), Is.EqualTo(1));
 
-        // Test successful removal
-        Assert.That(playlist.RemoveSong("Never Gonna Give You Up"), Is.True);
+        // FIX: Pass a Song object, not a string
+        Assert.That(playlist.RemoveSong(new Song { Title = "Never Gonna Give You Up" }), Is.True);
         Assert.That(playlist.Length(), Is.EqualTo(0));
     }
 
@@ -37,12 +38,12 @@ public class FunctionalTests
         playlist.AddSong(new Song() { Title = "Song 1" });
         playlist.AddSong(new Song() { Title = "Song 2" });
 
-        Assert.That(playlist.PlayNext().Title, Is.EqualTo("Song 1"));
-        Assert.That(playlist.PlayNext().Title, Is.EqualTo("Song 2"));
+        Assert.That(playlist.PlayNext()?.Title, Is.EqualTo("Song 1"));
+        Assert.That(playlist.PlayNext()?.Title, Is.EqualTo("Song 2"));
         Assert.That(playlist.PlayNext(), Is.Null); // End of list
 
         playlist.Reset();
-        Assert.That(playlist.PlayNext().Title, Is.EqualTo("Song 1"));
+        Assert.That(playlist.PlayNext()?.Title, Is.EqualTo("Song 1"));
     }
 
     [Test]
@@ -52,12 +53,12 @@ public class FunctionalTests
         playlist.AddSong(new Song() { Title = "Song 1" });
         playlist.AddSong(new Song() { Title = "Song 2" });
 
-        // Move 2nd song to 1st position
-        Assert.That(playlist.MoveSongUp("Song 2"), Is.True);
+        // FIX: Pass a Song object, not a string
+        Assert.That(playlist.MoveSongUp(new Song { Title = "Song 2" }), Is.True);
         playlist.Reset();
-        Assert.That(playlist.PlayNext().Title, Is.EqualTo("Song 2"));
+        Assert.That(playlist.PlayNext()?.Title, Is.EqualTo("Song 2"));
 
         // Edge Case: Move top song up (should return true but stay at top)
-        Assert.That(playlist.MoveSongUp("Song 2"), Is.True);
+        Assert.That(playlist.MoveSongUp(new Song { Title = "Song 2" }), Is.True);
     }
 }
